@@ -1,5 +1,5 @@
 {
-    "name":        "arcanedev/php-html",
+    "name":        "thechrise/php-html",
     "description": "A simple way to create html tags with php.",
     "homepage":    "https://github.com/ARCANEDEV/php-html",
     "keywords":    ["arcanedev", "html", "form", "tags"],
@@ -9,6 +9,12 @@
             "email":    "arcanedev.maroc@gmail.com",
             "homepage": "https://github.com/arcanedev-maroc",
             "role":     "Developer"
+        },
+        {
+            "name":     "Chris Evans",
+            "email":    "chris.t.evans@icloud.com",
+            "homepage": "https://github.com/thechrise",
+            "role":     "Forker"
         }
     ],
     "type":    "library",
