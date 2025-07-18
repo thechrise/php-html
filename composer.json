@@ -20,12 +20,13 @@
     "type":    "library",
     "license": "MIT",
     "require": {
-        "php": "^8.1",
-        "illuminate/support": "^10.0"
+        "php": "^8.2",
+        "illuminate/support": "^11.0"
     },
     "require-dev": {
         "ext-dom": "*",
-        "phpunit/phpunit": "^10.0"
+        "laravel/pint": "^1.14",
+        "phpunit/phpunit": "^10.5|^11.0"
     },
     "autoload": {
         "psr-4": {
@@ -40,12 +41,13 @@
     "scripts": {
         "test": "phpunit --colors=always",
         "test:dox": "phpunit --testdox --colors=always",
-        "test:cov": "phpunit --coverage-html",
-        "test:ci": "phpunit --coverage-text"
+        "test:ci": "phpunit --coverage-text",
+        "cs:fix": "pint -v",
+        "cs:test": "pint --test -v"
     },
     "extra": {
         "branch-alias": {
-            "dev-develop": "7.x-dev"
+            "dev-develop": "8.x-dev"
         }
     },
     "config": {

@@ -62,7 +62,7 @@ trait HasChildElements
      */
     public function initChildren(): static
     {
-        return $this->setChildren(new ChildrenCollection);
+        return $this->setChildren(new ChildrenCollection());
     }
 
     /**
@@ -70,7 +70,7 @@ trait HasChildElements
      *
      * @return $this
      */
-    public function children(mixed $children, ?Closure $mapper = null): static
+    public function children(mixed $children, Closure|array|null $mapper = null): static
     {
         return $this->addChild($children, $mapper);
     }
@@ -80,12 +80,13 @@ trait HasChildElements
      *
      * @return $this
      */
-    public function addChild(mixed $child, ?Closure $mapper = null): static
+    public function addChild(mixed $child, Closure|array|null $mapper = null): static
     {
-        if (is_null($child))
+        if ($child === null) {
             return $this;
+        }
 
-        return tap(clone $this, function (HtmlElement $elt) use ($child, $mapper) {
+        return tap(clone $this, function (HtmlElement $elt) use ($child, $mapper): void {
             $elt->setChildren(
                 $elt->getChildren()->merge(ChildrenCollection::parse($child, $mapper))
             );
@@ -97,7 +98,7 @@ trait HasChildElements
      *
      * @return $this
      */
-    public function setNewChildren(mixed $children, Closure $mapper = null): static
+    public function setNewChildren(mixed $children, Closure|array|null $mapper = null): static
     {
         return tap(clone $this)
             ->initChildren()
@@ -109,7 +110,7 @@ trait HasChildElements
      *
      * @return $this
      */
-    public function prependChild(mixed $children, ?Closure $mapper = null): static
+    public function prependChild(mixed $children, Closure|array|null $mapper = null): static
     {
         return $this->prependChildren($children, $mapper);
     }
@@ -119,9 +120,9 @@ trait HasChildElements
      *
      * @return $this
      */
-    public function prependChildren(mixed $children, ?Closure $mapper = null): static
+    public function prependChildren(mixed $children, Closure|array|null $mapper = null): static
     {
-        return tap(clone $this, function (HtmlElement $elt) use ($children, $mapper) {
+        return tap(clone $this, function (HtmlElement $elt) use ($children, $mapper): void {
             $elt->getChildren()
                 ->prepend(ChildrenCollection::parse($children, $mapper));
         });

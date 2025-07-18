@@ -66,17 +66,6 @@ class Attributes implements ArrayAccess, Arrayable
     }
 
     /**
-     * Make a new attribute.
-     */
-    protected static function makeAttribute(string $name, mixed $value): ClassAttribute|MiscAttribute
-    {
-        return match ($name) {
-            'class' => new ClassAttribute($value),
-            default => new MiscAttribute($name, $value),
-        };
-    }
-
-    /**
      * Get an attribute.
      *
      * @return $this|mixed
@@ -105,15 +94,16 @@ class Attributes implements ArrayAccess, Arrayable
     /**
      * Determine if an item exists in the collection by key.
      *
-     * @param array<string> ...$keys
+     * @param string|array<string> ...$keys
      *
      * @return bool
      */
     public function has(...$keys): bool
     {
         foreach ($keys as $value) {
-            if ( ! $this->offsetExists($value))
+            if ( ! $this->offsetExists($value)) {
                 return false;
+            }
         }
 
         return true;
@@ -153,8 +143,9 @@ class Attributes implements ArrayAccess, Arrayable
      */
     public function render(): string
     {
-        if ($this->isEmpty())
+        if ($this->isEmpty()) {
             return '';
+        }
 
         return implode(' ', array_map(
             fn(AbstractAttribute $attribute) => $attribute->render(),
@@ -224,5 +215,16 @@ class Attributes implements ArrayAccess, Arrayable
     public function offsetUnset($offset): void
     {
         unset($this->items[$offset]);
+    }
+
+    /**
+     * Make a new attribute.
+     */
+    protected static function makeAttribute(string $name, mixed $value): ClassAttribute|MiscAttribute
+    {
+        return match ($name) {
+            'class' => new ClassAttribute($value),
+            default => new MiscAttribute($name, $value),
+        };
     }
 }

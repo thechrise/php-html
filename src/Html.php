@@ -20,12 +20,14 @@ use Arcanedev\Html\Elements\Label;
 use Arcanedev\Html\Elements\Legend;
 use Arcanedev\Html\Elements\Ol;
 use Arcanedev\Html\Elements\Option;
+use Arcanedev\Html\Elements\P;
 use Arcanedev\Html\Elements\Select;
 use Arcanedev\Html\Elements\Span;
 use Arcanedev\Html\Elements\Textarea;
 use Arcanedev\Html\Elements\Ul;
 use Arcanedev\Html\Entities\Attributes\ClassAttribute;
 use DateTimeImmutable;
+use Exception;
 use Illuminate\Support\Str;
 
 /**
@@ -40,8 +42,8 @@ class Html implements HtmlContract
      | -----------------------------------------------------------------
      */
 
-    const HTML_DATE_FORMAT = 'Y-m-d';
-    const HTML_TIME_FORMAT = 'H:i:s';
+    public const HTML_DATE_FORMAT = 'Y-m-d';
+    public const HTML_TIME_FORMAT = 'H:i:s';
 
     /* -----------------------------------------------------------------
      |  Main Methods
@@ -78,7 +80,7 @@ class Html implements HtmlContract
             ->attributeIfNotNull($name, 'name', $name)
             ->attributeIfNotNull($name, 'id', $name)
             ->attributeIfNotNull($value, 'value', $value)
-            ->attributeIf((bool)$checked, 'checked');
+            ->attributeIf((bool) $checked, 'checked');
     }
 
     /**
@@ -150,7 +152,7 @@ class Html implements HtmlContract
      */
     public function fieldset(mixed $legend = null): Fieldset
     {
-        return is_null($legend)
+        return $legend === null
             ? Fieldset::make()
             : Fieldset::make()->legend($legend);
     }
@@ -196,7 +198,7 @@ class Html implements HtmlContract
      */
     public function input(?string $type = null, ?string $name = null, mixed $value = null): Input
     {
-        $hasValue = $name && !is_null($value) && $type !== 'password';
+        $hasValue = $name && $value !== null && $type !== 'password';
 
         return Input::make()
             ->attributeIfNotNull($type, 'type', $type)
@@ -228,7 +230,7 @@ class Html implements HtmlContract
     /**
      * Make a legend tag.
      */
-    public function legend(mixed $content = null): Legend
+    public function legend(HtmlElement|string|null $content = null): Legend
     {
         return Legend::make()->html($content);
     }
@@ -262,7 +264,7 @@ class Html implements HtmlContract
      */
     public function ol(array $attributes = []): Ol
     {
-        return Elements\Ol::make()->attributes($attributes);
+        return Ol::make()->attributes($attributes);
     }
 
     /**
@@ -274,6 +276,14 @@ class Html implements HtmlContract
             ->text($text)
             ->value($value)
             ->selectedIf($selected);
+    }
+
+    /**
+     * Make a paragraph tag.
+     */
+    public function p(HtmlElement|string|null $content = null): P
+    {
+        return P::make()->html($content);
     }
 
     /**
@@ -291,14 +301,14 @@ class Html implements HtmlContract
     {
         return $this->input('radio', $name, $value)
             ->attributeIfNotNull($name, 'id', $value === null ? $name : ($name . '_' . Str::slug($value)))
-            ->attributeIf((!is_null($value)) || $checked, 'checked');
+            ->attributeIf(($value !== null) || $checked, 'checked');
     }
 
     /**
      * Make a range input.
      */
     public function range(
-        string $name = null,
+        ?string $name = null,
         mixed $value = null,
         mixed $min = null,
         mixed $max = null,
@@ -341,7 +351,7 @@ class Html implements HtmlContract
     /**
      * Make a submit button.
      */
-    public function submit(mixed $text = null): Button
+    public function submit(?string $text = null): Button
     {
         return $this->button($text, 'submit');
     }
@@ -404,9 +414,10 @@ class Html implements HtmlContract
     protected static function formatDateTime(string $value, string $format): string
     {
         try {
-            if (!empty($value))
+            if ( ! empty($value)) {
                 $value = (new DateTimeImmutable($value))->format($format);
-        } catch (\Exception $e) {
+            }
+        } catch (Exception $e) {
             // Do nothing...
         }
 
@@ -420,6 +431,6 @@ class Html implements HtmlContract
     {
         return $format
             && $input->hasAttribute('value')
-            && !empty($value = $input->getAttribute('value')->value());
+            && ! empty($value = $input->getAttribute('value')->value());
     }
 }

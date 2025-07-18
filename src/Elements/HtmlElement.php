@@ -5,13 +5,11 @@ declare(strict_types=1);
 namespace Arcanedev\Html\Elements;
 
 use Arcanedev\Html\Contracts\Elements\HtmlElement as HtmlElementContract;
+use Arcanedev\Html\Elements\Concerns\{HasAttributes, HasChildElements, HasConditionalMethods};
 use Arcanedev\Html\Entities\Attributes\ClassAttribute;
 use Arcanedev\Html\Exceptions\InvalidHtmlException;
 use Arcanedev\Html\Exceptions\MissingTagException;
-use Illuminate\Support\Collection;
-use Illuminate\Support\HtmlString;
-use Illuminate\Support\Str;
-use Illuminate\Support\Traits\Macroable;
+use Illuminate\Support\{Collection, HtmlString, Str, Traits\Macroable};
 
 /**
  * Class     HtmlElement
@@ -29,12 +27,12 @@ class HtmlElement implements HtmlElementContract
      | -----------------------------------------------------------------
      */
 
-    use Concerns\HasAttributes,
-        Concerns\HasChildElements,
-        Concerns\HasConditionalMethods,
-        Macroable {
-            __call as __callMacro;
-        }
+    use HasAttributes;
+    use HasChildElements;
+    use HasConditionalMethods;
+    use Macroable {
+        __call as __callMacro;
+    }
 
     /* -----------------------------------------------------------------
      |  Properties
@@ -60,6 +58,44 @@ class HtmlElement implements HtmlElementContract
         $this->initChildren();
     }
 
+    /* -----------------------------------------------------------------
+     |  Magic Methods
+     | -----------------------------------------------------------------
+     */
+
+    /**
+     * Render the element to string (magic method).
+     */
+    public function __toString(): string
+    {
+        return $this->toHtml();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function __call($name, array $arguments = [])
+    {
+        if (Str::endsWith($name, $this->supportedConditions)) {
+            foreach ($this->supportedConditions as $condition) {
+                if (method_exists($this, $method = str_replace($condition, '', $name))) {
+                    return $this->callConditionalMethod($condition, $method, $arguments);
+                }
+            }
+        }
+
+        return $this->__callMacro($name, $arguments);
+    }
+
+    /**
+     * Clone the object.
+     */
+    public function __clone()
+    {
+        $this->attributes = clone $this->attributes;
+        $this->children   = clone $this->children;
+    }
+
     /**
      * Make a html element.
      *
@@ -67,7 +103,7 @@ class HtmlElement implements HtmlElementContract
      */
     public static function make(): static
     {
-        return new static;
+        return new static();
     }
 
     /**
@@ -76,35 +112,6 @@ class HtmlElement implements HtmlElementContract
     public static function withTag(string $tag): static
     {
         return static::make()->setTag($tag);
-    }
-
-    /* -----------------------------------------------------------------
-     |  Setters & Getters
-     | -----------------------------------------------------------------
-     */
-
-    /**
-     * Set the tag property.
-     */
-    protected function setTag(string $tag): static
-    {
-        $this->tag = $tag;
-
-        return $this;
-    }
-
-    /**
-     * Get the tag type.
-     *
-     * @throws \Arcanedev\Html\Exceptions\MissingTagException
-     */
-    protected function getTag(): string
-    {
-        if (empty($this->tag)) {
-            throw MissingTagException::onClass(static::class);
-        }
-
-        return $this->tag;
     }
 
     /**
@@ -132,7 +139,7 @@ class HtmlElement implements HtmlElementContract
      */
     public function class(iterable|string $class): static
     {
-        return tap(clone $this, function (HtmlElement $elt) use ($class) {
+        return tap(clone $this, function (HtmlElement $elt) use ($class): void {
             $elt->getAttributes()->addClass($class);
         });
     }
@@ -144,7 +151,7 @@ class HtmlElement implements HtmlElementContract
      */
     public function pushClass(string $class): static
     {
-        return tap(clone $this, function (HtmlElement $elt) use ($class) {
+        return tap(clone $this, function (HtmlElement $elt) use ($class): void {
             $elt->classList()->push($class);
         });
     }
@@ -191,11 +198,9 @@ class HtmlElement implements HtmlElementContract
     }
 
     /**
-     * Add an html child/children.
+     * Add a html child/children.
      *
      * @return $this
-     *
-     * @throws \Arcanedev\Html\Exceptions\InvalidHtmlException
      */
     public function html(mixed $html): static
     {
@@ -245,7 +250,7 @@ class HtmlElement implements HtmlElementContract
      */
     public function toHtml(): string
     {
-        return $this->open()->toHtml().
+        return $this->open()->toHtml() .
                $this->close()->toHtml();
     }
 
@@ -266,46 +271,41 @@ class HtmlElement implements HtmlElementContract
     }
 
     /* -----------------------------------------------------------------
-     |  Magic Methods
+     |  Setters & Getters
      | -----------------------------------------------------------------
      */
 
     /**
-     * Render the element to string (magic method).
+     * Set the tag property.
      */
-    public function __toString(): string
+    protected function setTag(string $tag): static
     {
-        return $this->toHtml();
+        $this->tag = $tag;
+
+        return $this;
     }
 
     /**
-     * Dynamically handle calls to the class.
-     * Check for methods finishing by If or fallback to Macroable.
+     * Get the tag type.
      *
-     * @param  string  $name
-     * @param  array   $arguments
-     *
-     * @return mixed
+     * @throws MissingTagException
      */
-    public function __call($name, array $arguments = [])
+    protected function getTag(): string
     {
-        if (Str::endsWith($name, $this->supportedConditions)) {
-            foreach ($this->supportedConditions as $condition) {
-                if (method_exists($this, $method = str_replace($condition, '', $name))) {
-                    return $this->callConditionalMethod($condition, $method, $arguments);
-                }
-            }
+        $this->ensureHasTag();
+
+        return $this->tag;
+    }
+
+    /**
+     * Ensure the tag property is defined.
+     *
+     * @throws MissingTagException
+     */
+    protected function ensureHasTag(): void
+    {
+        if (empty($this->tag)) {
+            throw MissingTagException::onClass(static::class);
         }
-
-        return $this->__callMacro($name, $arguments);
-    }
-
-    /**
-     * Clone the object.
-     */
-    public function __clone()
-    {
-        $this->attributes = clone $this->attributes;
-        $this->children   = clone $this->children;
     }
 }

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Arcanedev\Html\Tests\Html;
 
+use PHPUnit\Framework\Attributes\Test;
+
 /**
  * Class     FormTest
  *
@@ -16,7 +18,7 @@ class FormTest extends TestCase
      | -----------------------------------------------------------------
      */
 
-    /** @test */
+    #[Test]
     public function it_can_create_a_form(): void
     {
         static::assertHtmlStringEqualsHtmlString(
@@ -25,7 +27,7 @@ class FormTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_can_create_a_form_with_a_custom_action(): void
     {
         static::assertHtmlStringEqualsHtmlString(
@@ -34,12 +36,12 @@ class FormTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_can_create_a_form_with_a_target(): void
     {
         static::assertHtmlStringEqualsHtmlString(
-            '<form method="POST" action="/submit" target="_blank">'.
-            '<input type="hidden" name="_token" value="abc">'.
+            '<form method="POST" action="/submit" target="_blank">' .
+            '<input type="hidden" name="_token" value="abc">' .
             '</form>',
             $this->html
                 ->form('POST', '/submit')

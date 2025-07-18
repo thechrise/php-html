@@ -17,6 +17,11 @@ abstract class ListElement extends HtmlElement
      */
 
     /**
+     * Make an item.
+     */
+    abstract protected function makeItem(mixed $value, array $attributes): HtmlElement;
+
+    /**
      * Add an item.
      *
      * @return $this
@@ -41,9 +46,4 @@ abstract class ListElement extends HtmlElement
             $attributes
         ));
     }
-
-    /**
-     * Make an item.
-     */
-    abstract protected function makeItem(mixed $value, array $attributes): HtmlElement;
 }

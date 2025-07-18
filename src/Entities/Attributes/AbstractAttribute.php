@@ -16,20 +16,10 @@ abstract class AbstractAttribute
      | -----------------------------------------------------------------
      */
 
-    protected string $name;
-
-    /* -----------------------------------------------------------------
-     |  Getters & Setters
-     | -----------------------------------------------------------------
-     */
-
     /**
-     * Get the attribute name.
+     * The attribute's name.
      */
-    public function name(): string
-    {
-        return $this->name;
-    }
+    protected string $name;
 
     /**
      * Get the attribute's value.
@@ -47,4 +37,17 @@ abstract class AbstractAttribute
      * Render the attribute.
      */
     abstract public function render(): string;
+
+    /* -----------------------------------------------------------------
+     |  Getters & Setters
+     | -----------------------------------------------------------------
+     */
+
+    /**
+     * Get the attribute name.
+     */
+    public function name(): string
+    {
+        return $this->name;
+    }
 }

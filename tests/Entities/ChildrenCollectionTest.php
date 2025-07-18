@@ -7,6 +7,8 @@ namespace Arcanedev\Html\Tests\Entities;
 use Arcanedev\Html\Elements\Span;
 use Arcanedev\Html\Entities\ChildrenCollection;
 use Arcanedev\Html\Tests\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Class     ChildrenCollectionTest
@@ -15,15 +17,25 @@ use Arcanedev\Html\Tests\TestCase;
  */
 class ChildrenCollectionTest extends TestCase
 {
+    /**
+     * >DATA PROVIDER
+     */
+    public static function getInvalidChildrenToParseDataProvider(): array
+    {
+        return [
+            [true],
+            [false],
+        ];
+    }
     /* -----------------------------------------------------------------
      |  Tests
      | -----------------------------------------------------------------
      */
 
-    /** @test */
+    #[Test]
     public function it_can_be_instantiated(): void
     {
-        $children = new ChildrenCollection;
+        $children = new ChildrenCollection();
 
         $expectations = [
             \Arcanedev\Html\Contracts\Renderable::class,
@@ -38,7 +50,7 @@ class ChildrenCollectionTest extends TestCase
         static::assertTrue($children->isEmpty());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_parse_children(): void
     {
         $children = ChildrenCollection::parse(['foo', null, 'bar']);
@@ -47,11 +59,11 @@ class ChildrenCollectionTest extends TestCase
         static::assertEquals(['foo', null, 'bar'], $children->all());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_convert_to_html(): void
     {
         $children = ChildrenCollection::parse(['foo', null, 'bar'], function ($child) {
-            return ! is_null($child)
+            return $child !== null
                 ? Span::make()->html($child)
                 : $child;
         });
@@ -60,11 +72,8 @@ class ChildrenCollectionTest extends TestCase
         static::assertEquals('<span>foo</span><span>bar</span>', $children->toHtml());
     }
 
-    /**
-     * @test
-     *
-     * @dataProvider getInvalidChildrenToParseDataProvider
-     */
+    #[Test]
+    #[DataProvider('getInvalidChildrenToParseDataProvider')]
     public function it_must_throw_exception_on_parse_with_invalid_child(mixed $child): void
     {
         $this->expectException(\Arcanedev\Html\Exceptions\InvalidChildException::class);
@@ -72,26 +81,12 @@ class ChildrenCollectionTest extends TestCase
         ChildrenCollection::parse($child);
     }
 
-    /**
-     * @test
-     *
-     * @dataProvider getInvalidChildrenToParseDataProvider
-     */
+    #[Test]
+    #[DataProvider('getInvalidChildrenToParseDataProvider')]
     public function it_must_throw_exception_on_convert_to_html_with_invalid_child(mixed $child): void
     {
         $this->expectException(\Arcanedev\Html\Exceptions\InvalidChildException::class);
 
         ChildrenCollection::make([$child])->toHtml();
-    }
-
-    /**
-     * >DATA PROVIDER
-     */
-    public static function getInvalidChildrenToParseDataProvider(): array
-    {
-        return [
-            [true],
-            [false],
-        ];
     }
 }

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Arcanedev\Html\Tests\Html;
 
+use PHPUnit\Framework\Attributes\Test;
+
 /**
  * Class     DlTest
  *
@@ -16,7 +18,7 @@ class DlTest extends TestCase
      | -----------------------------------------------------------------
      */
 
-    /** @test */
+    #[Test]
     public function it_can_be_instantiated(): void
     {
         $dl = $this->html->dl();
@@ -31,7 +33,7 @@ class DlTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function it_can_make_list(): void
     {
         $dl = $this->html->dl();
@@ -47,7 +49,7 @@ class DlTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_can_add_items(): void
     {
         $dl    = $this->html->dl();
@@ -72,19 +74,19 @@ class DlTest extends TestCase
         }
 
         static::assertHtmlStringEqualsHtmlString(
-            '<dl>'.
-                '<dt>Term 1</dt>'.
-                '<dd>Definition 1</dd>'.
-                '<dt>Term 2</dt>'.
-                '<dd>Definition 2</dd>'.
-                '<dt>Term 3</dt>'.
-                '<dd>Definition 3</dd>'.
+            '<dl>' .
+                '<dt>Term 1</dt>' .
+                '<dd>Definition 1</dd>' .
+                '<dt>Term 2</dt>' .
+                '<dd>Definition 2</dd>' .
+                '<dt>Term 3</dt>' .
+                '<dd>Definition 3</dd>' .
             '</dl>',
             $dl
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_can_add_html_items(): void
     {
         $items = [
@@ -94,19 +96,19 @@ class DlTest extends TestCase
         ];
 
         static::assertHtmlStringEqualsHtmlString(
-            '<dl>'.
-                '<dt>Term 1</dt>'.
-                '<dd>Definition 1</dd>'.
-                '<dt>Term 2</dt>'.
-                '<dd>Definition 2</dd>'.
-                '<dt>Term 3</dt>'.
-                '<dd>Definition 3</dd>'.
+            '<dl>' .
+                '<dt>Term 1</dt>' .
+                '<dd>Definition 1</dd>' .
+                '<dt>Term 2</dt>' .
+                '<dd>Definition 2</dd>' .
+                '<dt>Term 3</dt>' .
+                '<dd>Definition 3</dd>' .
             '</dl>',
             $this->html->dl()->items($items)
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_can_add_multiple_items_at_once_with_custom_attributes(): void
     {
         $items = [
@@ -116,13 +118,13 @@ class DlTest extends TestCase
         ];
 
         static::assertHtmlStringEqualsHtmlString(
-            '<dl>'.
-                '<dt class="list-item-term">Term 1</dt>'.
-                '<dd class="list-item-definition">Definition 1</dd>'.
-                '<dt class="list-item-term">Term 2</dt>'.
-                '<dd class="list-item-definition">Definition 2</dd>'.
-                '<dt class="list-item-term">Term 3</dt>'.
-                '<dd class="list-item-definition">Definition 3</dd>'.
+            '<dl>' .
+                '<dt class="list-item-term">Term 1</dt>' .
+                '<dd class="list-item-definition">Definition 1</dd>' .
+                '<dt class="list-item-term">Term 2</dt>' .
+                '<dd class="list-item-definition">Definition 2</dd>' .
+                '<dt class="list-item-term">Term 3</dt>' .
+                '<dd class="list-item-definition">Definition 3</dd>' .
             '</dl>',
             $this->html->dl()->items($items, [
                 'dt' => ['class' => 'list-item-term'],

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Arcanedev\Html\Tests;
 
 use Arcanedev\Html\Html;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Class     HtmlTest
@@ -29,7 +30,7 @@ class HtmlTest extends TestCase
     {
         parent::setUp();
 
-        $this->html = new Html;
+        $this->html = new Html();
     }
 
     /* -----------------------------------------------------------------
@@ -37,7 +38,7 @@ class HtmlTest extends TestCase
      | -----------------------------------------------------------------
      */
 
-    /** @test */
+    #[Test]
     public function it_can_make_class_attribute(): void
     {
         static::assertSame(

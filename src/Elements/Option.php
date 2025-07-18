@@ -21,8 +21,8 @@ class Option extends HtmlElement implements Selectable
      | -----------------------------------------------------------------
      */
 
-    use HasDisabledAttribute,
-        HasValueAttribute;
+    use HasDisabledAttribute;
+    use HasValueAttribute;
 
     /* -----------------------------------------------------------------
      |  Properties
@@ -43,17 +43,17 @@ class Option extends HtmlElement implements Selectable
      */
     public function selectedIf(bool $condition): static
     {
-        return $condition ? $this->selected() : $this->unselected();
+        return $condition
+            ? $this->attribute('selected')
+            : $this->forgetAttribute('selected');
     }
 
     /**
      * Add the selected attribute.
      */
-    public function selected(bool $selected = true): static
+    public function selected(): static
     {
-        return $selected
-            ? $this->attribute('selected')
-            : $this->forgetAttribute('selected');
+        return $this->selectedIf(true);
     }
 
     /**
@@ -61,6 +61,6 @@ class Option extends HtmlElement implements Selectable
      */
     public function unselected(): static
     {
-        return $this->selected(false);
+        return $this->selectedIf(false);
     }
 }

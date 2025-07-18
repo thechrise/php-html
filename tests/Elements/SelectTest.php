@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Arcanedev\Html\Tests\Elements;
 
 use Arcanedev\Html\Elements\Select;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Class     SelectTest
@@ -18,7 +19,7 @@ class SelectTest extends TestCase
      | -----------------------------------------------------------------
      */
 
-    /** @test */
+    #[Test]
     public function it_can_render_a_select_input(): void
     {
         static::assertHtmlStringEqualsHtmlString(
@@ -27,7 +28,7 @@ class SelectTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_can_render_a_select_element_required(): void
     {
         static::assertHtmlStringEqualsHtmlString(
@@ -36,7 +37,7 @@ class SelectTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_can_render_options(): void
     {
         $options = [
@@ -53,7 +54,7 @@ class SelectTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_can_have_a_value(): void
     {
         $options = [
@@ -70,19 +71,19 @@ class SelectTest extends TestCase
         );
 
         static::assertHtmlStringEqualsHtmlString(
-            '<select name="avc">'.
-                '<option value="null">Select an option</option>'.
-                '<option value="1" selected>Yes</option>'.
-                '<option value="0">No</option>'.
+            '<select name="avc">' .
+                '<option value="null">Select an option</option>' .
+                '<option value="1" selected>Yes</option>' .
+                '<option value="0">No</option>' .
             '</select>',
             Select::make()
-                  ->name('avc')
-                  ->options(['null' => 'Select an option', 1 => 'Yes', 0 => 'No'])
-                  ->value(1)
+                ->name('avc')
+                ->options(['null' => 'Select an option', 1 => 'Yes', 0 => 'No'])
+                ->value(1)
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_can_have_a_placeholder_option(): void
     {
         static::assertHtmlStringEqualsHtmlString(
@@ -92,8 +93,8 @@ class SelectTest extends TestCase
                 <option value="value2">text2</option>
             </select>',
             Select::make()
-                  ->options(['value1' => 'text1', 'value2' => 'text2'])
-                  ->placeholder('Placeholder')
+                ->options(['value1' => 'text1', 'value2' => 'text2'])
+                ->placeholder('Placeholder')
         );
 
         static::assertHtmlStringEqualsHtmlString(
@@ -103,8 +104,8 @@ class SelectTest extends TestCase
                 <option value="value2">text2</option>
             </select>',
             Select::make()
-                  ->options(['value1' => 'text1', 'value2' => 'text2'])
-                  ->placeholder('Placeholder', 0)
+                ->options(['value1' => 'text1', 'value2' => 'text2'])
+                ->placeholder('Placeholder', 0)
         );
 
         static::assertHtmlStringEqualsHtmlString(
@@ -114,12 +115,12 @@ class SelectTest extends TestCase
                 <option value="value2">text2</option>
             </select>',
             Select::make()
-                  ->options(['value1' => 'text1', 'value2' => 'text2'])
-                  ->placeholder('Placeholder', 0, true)
+                ->options(['value1' => 'text1', 'value2' => 'text2'])
+                ->placeholder('Placeholder', 0, true)
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_doesnt_select_the_placeholder_if_something_has_already_been_selected(): void
     {
         static::assertHtmlStringEqualsHtmlString(
@@ -129,13 +130,13 @@ class SelectTest extends TestCase
                 <option value="value2">text2</option>
             </select>',
             Select::make()
-                  ->options(['value1' => 'text1', 'value2' => 'text2'])
-                  ->value('value1')
-                  ->placeholder('Placeholder', 0)
+                ->options(['value1' => 'text1', 'value2' => 'text2'])
+                ->value('value1')
+                ->placeholder('Placeholder', 0)
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_can_have_a_multiple_option(): void
     {
         static::assertHtmlStringEqualsHtmlString(
@@ -145,12 +146,12 @@ class SelectTest extends TestCase
                 <option value="value3">text3</option>
             </select>',
             Select::make()
-                  ->options(['value1' => 'text1', 'value2' => 'text2', 'value3' => 'text3'])
-                  ->multiple()
+                ->options(['value1' => 'text1', 'value2' => 'text2', 'value3' => 'text3'])
+                ->multiple()
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_can_convert_multiple_select_name(): void
     {
         static::assertHtmlStringEqualsHtmlString(
@@ -160,13 +161,13 @@ class SelectTest extends TestCase
                 <option value="value3">text3</option>
             </select>',
             Select::make()
-                  ->name('foo')
-                  ->options(['value1' => 'text1', 'value2' => 'text2', 'value3' => 'text3'])
-                  ->multiple()
+                ->name('foo')
+                ->options(['value1' => 'text1', 'value2' => 'text2', 'value3' => 'text3'])
+                ->multiple()
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_can_have_multiple_values(): void
     {
         static::assertHtmlStringEqualsHtmlString(
@@ -176,13 +177,13 @@ class SelectTest extends TestCase
                 <option value="value3" selected>text3</option>
             </select>',
             Select::make()
-                  ->options(['value1' => 'text1', 'value2' => 'text2', 'value3' => 'text3'])
-                  ->value(['value1', 'value3'])
-                  ->multiple()
+                ->options(['value1' => 'text1', 'value2' => 'text2', 'value3' => 'text3'])
+                ->value(['value1', 'value3'])
+                ->multiple()
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_can_have_one_multiple_value(): void
     {
         static::assertHtmlStringEqualsHtmlString(
@@ -192,13 +193,13 @@ class SelectTest extends TestCase
                 <option value="value3" selected>text3</option>
             </select>',
             Select::make()
-                  ->options(['value1' => 'text1', 'value2' => 'text2', 'value3' => 'text3'])
-                  ->value('value3')
-                  ->multiple()
+                ->options(['value1' => 'text1', 'value2' => 'text2', 'value3' => 'text3'])
+                ->value('value3')
+                ->multiple()
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_can_have_an_optgroup(): void
     {
         static::assertHtmlStringEqualsHtmlString(
@@ -211,11 +212,11 @@ class SelectTest extends TestCase
                 </optgroup>
             </select>',
             Select::make()
-                  ->options(['Cats' => ['leopard' => 'Leopard'], 'Dogs' => ['spaniel' => 'Spaniel']])
+                ->options(['Cats' => ['leopard' => 'Leopard'], 'Dogs' => ['spaniel' => 'Spaniel']])
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_can_select_an_item_in_an_optgroup(): void
     {
         static::assertHtmlStringEqualsHtmlString(
@@ -228,12 +229,12 @@ class SelectTest extends TestCase
                 </optgroup>
             </select>',
             Select::make()
-                  ->options(['Cats' => ['leopard' => 'Leopard'], 'Dogs' => ['spaniel' => 'Spaniel']])
-                  ->value('leopard')
+                ->options(['Cats' => ['leopard' => 'Leopard'], 'Dogs' => ['spaniel' => 'Spaniel']])
+                ->value('leopard')
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_can_apply_options_with_custom_attributes(): void
     {
         static::assertHtmlStringEqualsHtmlString(
@@ -250,7 +251,7 @@ class SelectTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_can_select_an_item_in_an_optgroup_with_custom_attributes(): void
     {
         static::assertHtmlStringEqualsHtmlString(
@@ -290,7 +291,7 @@ class SelectTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_can_render_a_select_element_with_options_with_a_selected_value_when_the_values_are_similar(): void
     {
         $options = [
@@ -313,7 +314,7 @@ class SelectTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_can_create_a_disabled_select(): void
     {
         static::assertHtmlStringEqualsHtmlString(
@@ -324,7 +325,7 @@ class SelectTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_can_create_a_select_that_is_disabled_when_passing_true(): void
     {
         static::assertHtmlStringEqualsHtmlString(
@@ -335,7 +336,7 @@ class SelectTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_wont_create_a_select_that_is_disabled_when_passing_false(): void
     {
         static::assertHtmlStringEqualsHtmlString(
@@ -346,7 +347,7 @@ class SelectTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_can_create_a_select_that_has_autofocus(): void
     {
         static::assertHtmlStringEqualsHtmlString(
@@ -357,7 +358,7 @@ class SelectTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_can_create_a_select_that_has_autofocus_when_passing_true(): void
     {
         static::assertHtmlStringEqualsHtmlString(
@@ -368,7 +369,7 @@ class SelectTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_wont_create_a_select_that_has_autofocus_when_passing_false(): void
     {
         static::assertHtmlStringEqualsHtmlString(
@@ -379,7 +380,7 @@ class SelectTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_can_create_a_select_that_is_required(): void
     {
         static::assertHtmlStringEqualsHtmlString(
@@ -390,7 +391,7 @@ class SelectTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_can_create_a_select_that_is_required_when_passing_true(): void
     {
         static::assertHtmlStringEqualsHtmlString(
@@ -401,7 +402,7 @@ class SelectTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_wont_create_a_select_that_is_required_when_passing_false(): void
     {
         static::assertHtmlStringEqualsHtmlString(
@@ -412,7 +413,7 @@ class SelectTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_can_create_a_select_that_is_readonly(): void
     {
         static::assertHtmlStringEqualsHtmlString(
@@ -423,7 +424,7 @@ class SelectTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_can_create_a_select_that_is_readonly_when_passing_true(): void
     {
         static::assertHtmlStringEqualsHtmlString(
@@ -434,7 +435,7 @@ class SelectTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_wont_create_a_select_that_is_readonly_when_passing_false(): void
     {
         static::assertHtmlStringEqualsHtmlString(

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Arcanedev\Html\Tests\Html;
 
+use PHPUnit\Framework\Attributes\Test;
+
 /**
  * Class     OlTest
  *
@@ -16,7 +18,7 @@ class OlTest extends TestCase
      | -----------------------------------------------------------------
      */
 
-    /** @test */
+    #[Test]
     public function it_can_make_list(): void
     {
         static::assertHtmlStringEqualsHtmlString(
@@ -30,7 +32,7 @@ class OlTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_can_add_items(): void
     {
         $ol = $this->html->ol();
@@ -50,16 +52,16 @@ class OlTest extends TestCase
         }
 
         static::assertHtmlStringEqualsHtmlString(
-            '<ol>'.
-                '<li>Item 1</li>'.
-                '<li>Item 2</li>'.
-                '<li>Item 3</li>'.
+            '<ol>' .
+                '<li>Item 1</li>' .
+                '<li>Item 2</li>' .
+                '<li>Item 3</li>' .
             '</ol>',
             $ol
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_can_add_html_items(): void
     {
         $items = collect([
@@ -69,19 +71,19 @@ class OlTest extends TestCase
         ]);
 
         static::assertHtmlStringEqualsHtmlString(
-            '<ol>'.
-                '<li><a href="#">Item 1</a></li>'.
-                '<li><a href="#">Item 2</a></li>'.
-                '<li><a href="#">Item 3</a></li>'.
+            '<ol>' .
+                '<li><a href="#">Item 1</a></li>' .
+                '<li><a href="#">Item 2</a></li>' .
+                '<li><a href="#">Item 3</a></li>' .
             '</ol>',
             $this->html->ol()->items($items)
         );
 
         static::assertHtmlStringEqualsHtmlString(
-            '<ol class="list-group">'.
-                '<li class="list-group-item"><a href="#">Item 1</a></li>'.
-                '<li class="list-group-item"><a href="#">Item 2</a></li>'.
-                '<li class="list-group-item"><a href="#">Item 3</a></li>'.
+            '<ol class="list-group">' .
+                '<li class="list-group-item"><a href="#">Item 1</a></li>' .
+                '<li class="list-group-item"><a href="#">Item 2</a></li>' .
+                '<li class="list-group-item"><a href="#">Item 3</a></li>' .
             '</ol>',
             $this->html
                 ->ol(['class' => 'list-group'])
@@ -89,7 +91,7 @@ class OlTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_can_add_multiple_items_at_once(): void
     {
         $items = [
@@ -99,23 +101,23 @@ class OlTest extends TestCase
         ];
 
         static::assertHtmlStringEqualsHtmlString(
-            '<ol>'.
-                '<li>Item 1</li>'.
-                '<li>Item 2</li>'.
-                '<li>Item 3</li>'.
+            '<ol>' .
+                '<li>Item 1</li>' .
+                '<li>Item 2</li>' .
+                '<li>Item 3</li>' .
             '</ol>',
             $this->html->ol()->items($items)
         );
 
         static::assertHtmlStringEqualsHtmlString(
-            '<ol class="list-group">'.
-                '<li class="list-group-item">Item 1</li>'.
-                '<li class="list-group-item">Item 2</li>'.
-                '<li class="list-group-item">Item 3</li>'.
+            '<ol class="list-group">' .
+                '<li class="list-group-item">Item 1</li>' .
+                '<li class="list-group-item">Item 2</li>' .
+                '<li class="list-group-item">Item 3</li>' .
             '</ol>',
             $this->html
-                 ->ol(['class' => 'list-group'])
-                 ->items($items, ['class' => 'list-group-item'])
+                ->ol(['class' => 'list-group'])
+                ->items($items, ['class' => 'list-group-item'])
         );
     }
 }
